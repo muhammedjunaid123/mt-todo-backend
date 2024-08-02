@@ -17,4 +17,5 @@ const updateProject = asyncHandler(async (req, res) => {
     res.status(200).json(new apiResponse(200));
   }
 });
+
 export { createNewProject, updateProject };
