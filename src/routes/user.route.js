@@ -1,9 +1,8 @@
 import { Router } from "express";
-import { asyncHandler } from "../utils/asyncHandler.js";
-
+import {  userRegister } from "../controllers/user.controller.js";
 
 const route = Router();
 
+route.route("/register").post(userRegister);
 
-
-export default route
+export default route;
