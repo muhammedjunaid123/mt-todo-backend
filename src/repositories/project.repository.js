@@ -8,5 +8,12 @@ const createNewProjectRepo = async (data) => {
   });
   return await project.save();
 };
-
-export { createNewProjectRepo };
+const updateProjectRepo = async (data) => {
+  const { id, Title } = data;
+ return await projectModel.findByIdAndUpdate(
+    { _id: id },
+    { $set: { Title: Title } },
+    { upsert: true }
+  );
+}
+export { createNewProjectRepo, updateProjectRepo };
