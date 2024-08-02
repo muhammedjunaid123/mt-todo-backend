@@ -1,6 +1,11 @@
 import express from "express";
 import cors from "cors";
 const app = express();
+import dotenv from "dotenv";
+dotenv.config({
+  path: "./.env",
+});
+
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN,
@@ -17,4 +22,5 @@ import { errorHandler } from "./middlewares/error.middlewares.js";
 //routes
 app.use("/api/v1/user", userRoute);
 app.use(errorHandler);
+
 export { app };

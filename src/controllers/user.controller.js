@@ -11,10 +11,9 @@ import Jwt from "jsonwebtoken";
 //this will register the user to db
 const userRegister = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-
   const userData = await findUserEmailRepo(email);
 
-  if (userData.length > 0) {
+  if (userData && userData.length > 0) {
     throw new apiError(409, "email already used");
   }
 
@@ -34,7 +33,7 @@ const userLogin = asyncHandler(
 
     const userData = await findUserEmailRepo(email);
 
-    if (userData.length <= 0) {
+    if (userData && userData.length <= 0) {
       throw new apiError(404, "user not found");
     }
 
