@@ -11,10 +11,7 @@ const userRegisterRepo = async (email, hashePassword) => {
 
 //this will find user data with email
 const findUserEmailRepo = async (email) => {
-  return await userModel.find({ email: email });
+  return await userModel.findOne({ email: email });
 };
 
-
-
-
-export {  userRegisterRepo, findUserEmailRepo };
+export { userRegisterRepo, findUserEmailRepo };
