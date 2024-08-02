@@ -10,10 +10,16 @@ const createNewProjectRepo = async (data) => {
 };
 const updateProjectRepo = async (data) => {
   const { id, Title } = data;
- return await projectModel.findByIdAndUpdate(
+  return await projectModel.findByIdAndUpdate(
     { _id: id },
     { $set: { Title: Title } },
     { upsert: true }
   );
-}
-export { createNewProjectRepo, updateProjectRepo };
+};
+const updateProjectTodoList = async (projectId, id) => {
+  return await projectModel.findByIdAndUpdate(
+    { _id: projectId },
+    { $push: { ListTodos: id } }
+  );
+};
+export { createNewProjectRepo, updateProjectRepo,updateProjectTodoList };
