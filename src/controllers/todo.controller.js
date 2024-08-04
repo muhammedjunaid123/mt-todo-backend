@@ -1,5 +1,6 @@
 import {
   createTodoRepo,
+  deleteTodoRepo,
   updateTodoRepo,
 } from "../repositories/todo.repository.js";
 import { apiResponse } from "../utils/apiResponse.js";
@@ -17,4 +18,10 @@ const updateTodo = asyncHandler(async (req, res) => {
     res.status(200).json(new apiResponse(200));
   }
 });
-export { createTodo, updateTodo };
+const deleteTodo = asyncHandler(async (req, res) => {
+  const data = await deleteTodoRepo(req.query);
+  if (data) {
+    res.status(204).json(new apiResponse(204));
+  }
+});
+export { createTodo, updateTodo, deleteTodo };

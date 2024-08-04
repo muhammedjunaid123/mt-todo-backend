@@ -1,5 +1,5 @@
 import { todoModel } from "../models/todo.model.js";
-import { updateProjectTodoList } from "./project.repository.js";
+import { removeTodo, updateProjectTodoList } from "./project.repository.js";
 
 const createTodoRepo = async (data) => {
   const { Description, projectId } = data;
@@ -17,5 +17,10 @@ const updateTodoRepo = async (data) => {
     { $set: { Description: Description, Status: Status } }
   );
 };
+const deleteTodoRepo = async (data) => {
+  const { id, projectId } = data;
+  await removeTodo(projectId, id);
+  return await todoModel.deleteOne({ _id: id });
+};
 
-export { createTodoRepo,updateTodoRepo };
+export { createTodoRepo, updateTodoRepo, deleteTodoRepo };
