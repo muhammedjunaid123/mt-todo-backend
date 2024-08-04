@@ -28,7 +28,7 @@ const userProjectRepo = async (req) => {
   const { _id } = req.user;
   return await projectModel.find({ userId: _id });
 };
-const getProjectRepo = async (id) => {
+const   getProjectRepo = async (id) => {
   id = new mongoose.Types.ObjectId(id);
 
   const result = await projectModel.aggregate([
@@ -57,11 +57,12 @@ const getProjectRepo = async (id) => {
   return result;
 };
 const removeTodo = async (projectId, todoId) => {
-  const result = await projectModel.updateOne(
+return await projectModel.updateOne(
     { _id: projectId },
     { $pull: { ListTodos: todoId } }
   );
 };
+
 export {
   createNewProjectRepo,
   updateProjectRepo,

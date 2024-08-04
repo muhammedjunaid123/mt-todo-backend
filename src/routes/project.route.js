@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createNewProject,
+  exportGist,
   getProject,
   updateProject,
   userProject,
@@ -8,6 +9,7 @@ import {
 import { verifyJWT } from "../middlewares/auth.middlewares.js";
 
 const route = Router();
+route.route('/exportToGist').get(exportGist)
 route.use(verifyJWT);
 route.route("/create").post(createNewProject);
 route.route("/titleUpdate").patch(updateProject);
