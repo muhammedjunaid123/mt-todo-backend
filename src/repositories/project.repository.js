@@ -43,8 +43,17 @@ const getProjectRepo = async (id) => {
         as: "ListTodos",
       },
     },
+    {
+      $addFields: {
+        ListTodos: {
+          $sortArray: {
+            input: "$ListTodos",
+            sortBy: { Status: 1 }
+          }
+        }
+      }
+    }
   ]);
-
   return result;
 };
 const removeTodo = async (projectId, todoId) => {
