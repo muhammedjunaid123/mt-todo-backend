@@ -5,3 +5,6 @@ export const userData = {
   password: "test",
 };
 
+export const projectData = {
+    Title: "New Project"
+};
