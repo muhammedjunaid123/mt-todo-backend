@@ -30,10 +30,8 @@ const userRegister = asyncHandler(async (req, res) => {
 const userLogin = asyncHandler(
   asyncHandler(async (req, res) => {
     const { email, password } = req.body;
-
     const userData = await findUserEmailRepo(email);
-
-    if (userData && userData.length <= 0) {
+    if (!userData) {
       throw new apiError(404, "user not found");
     }
 

@@ -1,10 +1,13 @@
 import mongoose from "mongoose";
 import { apiError } from "../utils/apiError.js";
 
-
 const errorHandler = (err, req, res, next) => {
   let error = err;
-  
+  if (error.name == "MongoServerError" && err.code === 11000) {
+    const field = Object.keys(err.keyValue)[0];
+    error.message = `The ${field} already exists. Please use a different ${field}.`;
+  }
+
   if (!(error instanceof apiError)) {
     const statusCode =
       error.statusCode || error instanceof mongoose.Error ? 400 : 500;
