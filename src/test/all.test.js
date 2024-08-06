@@ -118,11 +118,6 @@ describe("POST /api/v1/project/create", () => {
 });
 
 describe("PUT /api/v1/project/titleUpdate", () => {
-  afterAll(async () => {
-    await userModel.deleteOne({ email: userData["email"] });
-    await projectModel.deleteOne({ _id: projectId });
-  });
-
   const projectDataUpdteWithId = { ...projectData };
   test("should update a project title successfully", async () => {
     projectDataUpdteWithId["id"] = projectId;
@@ -155,6 +150,33 @@ describe("PUT /api/v1/project/titleUpdate", () => {
       .patch("/api/v1/project/titleUpdate")
       .set("Authorization", `Bearer ${invalidToken}`)
       .send(projectDataUpdteWithId);
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body.statusCode).toBe(401);
+    expect(response.body.message).toBe("Invalid access token");
+  });
+});
+
+describe("GET /api/v1/project/getUserProject", () => {
+  afterAll(async () => {
+    await userModel.deleteOne({ email: userData["email"] });
+    await projectModel.deleteOne({ _id: projectId });
+  });
+  test("should return user project data successfully", async () => {
+    const response = await supertest(app)
+      .get("/api/v1/project/getUserProject")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.statusCode).toBe(200);
+  });
+
+  test("should return error if token is invalid", async () => {
+    const invalidToken = "invalidToken";
+
+    const response = await supertest(app)
+      .get("/api/v1/project/getUserProject")
+      .set("Authorization", `Bearer ${invalidToken}`);
 
     expect(response.statusCode).toBe(401);
     expect(response.body.statusCode).toBe(401);
