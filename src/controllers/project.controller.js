@@ -15,7 +15,7 @@ import { projectModel } from "../models/project.model.js";
 const createNewProject = asyncHandler(async (req, res) => {
   const data = await createNewProjectRepo(req);
   if (data) {
-    res.status(201).json(new apiResponse(201,data));
+    res.status(201).json(new apiResponse(201, data));
   }
 });
 const updateProject = asyncHandler(async (req, res) => {
@@ -70,7 +70,7 @@ ${pendingList}
 ${CompletedList}
 `;
 
-  fs.writeFile(filePath, text, (err) => {
+  await fs.writeFile(filePath, text, (err) => {
     if (err) {
       console.error("Error writing file:", err);
       return;
