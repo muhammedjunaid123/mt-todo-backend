@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { projectModel } from "../models/project.model.js";
+import { apiError } from "../utils/apiError.js";
 
 const createNewProjectRepo = async (data) => {
   const { Title } = data.body;
@@ -28,7 +29,10 @@ const userProjectRepo = async (req) => {
   const { _id } = req.user;
   return await projectModel.find({ userId: _id });
 };
-const   getProjectRepo = async (id) => {
+const getProjectRepo = async (id) => {
+  if (id==null) {
+    throw new apiError(400, "Project ID is required");
+  }
   id = new mongoose.Types.ObjectId(id);
 
   const result = await projectModel.aggregate([
@@ -48,16 +52,16 @@ const   getProjectRepo = async (id) => {
         ListTodos: {
           $sortArray: {
             input: "$ListTodos",
-            sortBy: { Status: 1 }
-          }
-        }
-      }
-    }
+            sortBy: { Status: 1 },
+          },
+        },
+      },
+    },
   ]);
   return result;
 };
 const removeTodo = async (projectId, todoId) => {
-return await projectModel.updateOne(
+  return await projectModel.updateOne(
     { _id: projectId },
     { $pull: { ListTodos: todoId } }
   );
@@ -69,5 +73,5 @@ export {
   updateProjectTodoList,
   userProjectRepo,
   getProjectRepo,
-  removeTodo
+  removeTodo,
 };

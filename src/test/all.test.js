@@ -158,10 +158,6 @@ describe("PUT /api/v1/project/titleUpdate", () => {
 });
 
 describe("GET /api/v1/project/getUserProject", () => {
-  afterAll(async () => {
-    await userModel.deleteOne({ email: userData["email"] });
-    await projectModel.deleteOne({ _id: projectId });
-  });
   test("should return user project data successfully", async () => {
     const response = await supertest(app)
       .get("/api/v1/project/getUserProject")
@@ -181,5 +177,47 @@ describe("GET /api/v1/project/getUserProject", () => {
     expect(response.statusCode).toBe(401);
     expect(response.body.statusCode).toBe(401);
     expect(response.body.message).toBe("Invalid access token");
+  });
+});
+
+describe("GET /api/v1/project/getProject", () => {
+  afterAll(async () => {
+    await userModel.deleteOne({ email: userData["email"] });
+    await projectModel.deleteOne({ _id: projectId });
+  });
+
+  test("should return project data successfully", async () => {
+    const response = await supertest(app)
+      .get("/api/v1/project/getProject")
+      .query({ id: projectId })
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.statusCode).toBe(200);
+  });
+
+  test("should return error if token is invalid", async () => {
+    const invalidToken = "invalidToken";
+
+    const response = await supertest(app)
+      .get("/api/v1/project/getProject")
+      .query({ id: projectId })
+      .set("Authorization", `Bearer ${invalidToken}`);
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body.statusCode).toBe(401);
+    expect(response.body.message).toBe("Invalid access token");
+  });
+
+  test("should return error if project ID is missing", async () => {
+    const response = await supertest(app)
+      .get("/api/v1/project/getProject")
+      .set("Authorization", `Bearer ${token}`);
+
+    console.log(response.body);
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body.statusCode).toBe(400);
+    expect(response.body.message).toBe("Project ID is required");
   });
 });
