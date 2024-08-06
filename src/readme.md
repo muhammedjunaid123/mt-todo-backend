@@ -31,7 +31,7 @@ For any questions, suggestions, or support, feel free to reach out:
 
 
 
-Thank you for checking out the Todo application! We hope it helps you manage your tasks efficiently. If you have any feedback or need assistance, don't hesitate to contact me.
+ If you have any feedback or need assistance, don't hesitate to contact me.
 
 
 ## Environment Setup
