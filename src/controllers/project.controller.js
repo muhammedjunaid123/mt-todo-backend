@@ -15,7 +15,7 @@ import { projectModel } from "../models/project.model.js";
 const createNewProject = asyncHandler(async (req, res) => {
   const data = await createNewProjectRepo(req);
   if (data) {
-    res.status(201).json(new apiResponse(201));
+    res.status(201).json(new apiResponse(201,data));
   }
 });
 const updateProject = asyncHandler(async (req, res) => {

@@ -8,3 +8,7 @@ export const userData = {
 export const projectData = {
     Title: "New Project"
 };
+
+export const projectDataUpdte={
+    Title: "old Project"
+}
