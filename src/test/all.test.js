@@ -261,12 +261,6 @@ describe("POST /api/v1/todo/create", () => {
   });
 });
 describe("patch /api/v1/todo/update", () => {
-  afterAll(async () => {
-    // Clean up
-    await userModel.deleteOne({ email: userData["email"] });
-    await projectModel.deleteOne({ _id: projectId });
-    await todoModel.deleteOne({ _id: todoId });
-  });
   const updatedTodoDataWithTodoId = { ...todoUpdateData };
   test("should update a todo and return status 200", async () => {
     updatedTodoDataWithTodoId["_id"] = todoId;
@@ -289,5 +283,49 @@ describe("patch /api/v1/todo/update", () => {
     expect(response.statusCode).toBe(401);
     expect(response.body.statusCode).toBe(401);
     expect(response.body.message).toBe("Invalid access token");
+  });
+});
+
+describe("DELETE /api/v1/todo/remove", () => {
+  afterAll(async () => {
+    // Clean up
+    await userModel.deleteOne({ email: userData["email"] });
+    await projectModel.deleteOne({ _id: projectId });
+    await todoModel.deleteOne({ _id: todoId });
+  });
+
+  test("should delete a todo and return status 204", async () => {
+    const response = await supertest(app)
+      .delete("/api/v1/todo/remove")
+      .query({ id: todoId, projectId: projectId })
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(204);
+
+    const deletedTodo = await todoModel.findById(todoId);
+    expect(deletedTodo).toBeNull();
+  });
+
+  test("should return error if token is invalid", async () => {
+    const invalidToken = "invalidToken";
+
+    const response = await supertest(app)
+      .delete("/api/v1/todo/remove")
+      .query({ id: todoId, projectId: projectId })
+      .set("Authorization", `Bearer ${invalidToken}`);
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body.statusCode).toBe(401);
+    expect(response.body.message).toBe("Invalid access token");
+  });
+
+  test("should return error if todo ID is missing", async () => {
+    const response = await supertest(app)
+      .delete("/api/v1/todo/remove")
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body.statusCode).toBe(400);
+    expect(response.body.message).toBe("Todo ID is required");
   });
 });

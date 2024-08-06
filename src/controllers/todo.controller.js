@@ -9,7 +9,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 const createTodo = asyncHandler(async (req, res) => {
   const data = await createTodoRepo(req.body);
   if (data) {
-    res.status(201).json(new apiResponse(201,data));
+    res.status(201).json(new apiResponse(201, data));
   }
 });
 const updateTodo = asyncHandler(async (req, res) => {
@@ -20,8 +20,6 @@ const updateTodo = asyncHandler(async (req, res) => {
 });
 const deleteTodo = asyncHandler(async (req, res) => {
   const data = await deleteTodoRepo(req.query);
-  if (data) {
-    res.status(204).json(new apiResponse(204));
-  }
+  res.status(204).json(new apiResponse(204));
 });
 export { createTodo, updateTodo, deleteTodo };

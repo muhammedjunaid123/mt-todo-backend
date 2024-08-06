@@ -23,6 +23,9 @@ const updateTodoRepo = async (data) => {
 };
 const deleteTodoRepo = async (data) => {
   const { id, projectId } = data;
+  if (!id | !projectId || id == "" || projectId == "") {
+    throw new apiError(400, "Todo ID is required");
+  }
   await removeTodo(projectId, id);
   return await todoModel.deleteOne({ _id: id });
 };
