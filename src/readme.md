@@ -2,57 +2,45 @@
 
 ## Description
 
-This is a Todo application built using Express.js. The app allows users to manage their tasks, including creating, reading, updating, and deleting todos. Additionally, the application includes functionality to export the todo data to a GitHub Gist, enabling users to back up their data or share it easily. 
+This Todo application, built with Express.js, allows users to manage tasks efficiently. Users can create, read, update, and delete todos, and also export their data to a GitHub Gist for backup or sharing purposes.
 
 ## Technologies Used
 
 - [Express.js](https://expressjs.com/)
 - [Node.js](https://nodejs.org/)
-- [MongoDB](https://www.mongodb.com/) or [In-Memory Store](#) (for data storage)
+- [MongoDB](https://www.mongodb.com/)
 - [Jest](https://jestjs.io/) (for testing)
 - [GitHub Gist API](https://docs.github.com/en/rest/gists) (for exporting data)
+- 
 
-## Installation
 
-To set up the project, follow these steps:
 
-1. Clone the repository:
+## Running the Application
 
-    ```bash
-    git clone https://github.com/muhammedjunaid123/mt-todo-backend.git
-    cd mt-todo-backend
-    ```
+To run the application, use the appropriate command based on your needs:
 
-2. Install the dependencies:
+- **Development Mode**: `npm run start`
+- **Watch Mode**: `npm run dev`
+- **Run Tests**: `npm run test`
 
-    ```bash
-    npm install
-    ```
+## Contact
 
-## Running the app
+For any questions, suggestions, or support, feel free to reach out:
 
-```bash
-# development
-$ npm run start
+- **Email:** [junaidvinu133@gmail.com](mailto:junaidvinu133@gmail.com)
 
-# watch mode
-$ npm run dev
 
-#run the test
-npm run test
-```
+
+Thank you for checking out the Todo application! We hope it helps you manage your tasks efficiently. If you have any feedback or need assistance, don't hesitate to contact me.
+
 
 ## Environment Setup
 
-1. Create a `.env` file in the root of the project directory
+Ensure you have a `.env` file in the root directory with the following environment variables:
 
-2. Add the following environment variables to your `.env` file:
-
-    ```
-    PORT=3000
-    MONGO_URL=mongodb://127.0.0.1:27017
-    CORS_ORIGIN=http://localhost:4200
-    USER_SECRET=HKJETU4GTHU848T45GFGE54T534TTJSDFBHJBASFHGASHFGH
-    GITHUB_TOKEN=you can create with your github profile
-    ```
-
+```env
+PORT=3000
+MONGO_URL=mongodb://127.0.0.1:27017
+CORS_ORIGIN=http://localhost:4200
+USER_SECRET=your_secret_key
+GITHUB_TOKEN=your_github_token
