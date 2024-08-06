@@ -1,8 +1,12 @@
 import { todoModel } from "../models/todo.model.js";
+import { apiError } from "../utils/apiError.js";
 import { removeTodo, updateProjectTodoList } from "./project.repository.js";
 
 const createTodoRepo = async (data) => {
   const { Description, projectId } = data;
+  if (!Description | !projectId || Description == "" || projectId == "") {
+    throw new apiError(400, "Invalid data");
+  }
   const todo = new todoModel({
     Description: Description,
   });

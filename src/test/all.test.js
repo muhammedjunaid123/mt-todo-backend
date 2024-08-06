@@ -2,10 +2,16 @@ import mongoose, { Promise } from "mongoose";
 import supertest from "supertest";
 import { app } from "../app.js";
 import dotenv from "dotenv";
-import { projectData, projectDataUpdte, userData } from "../constants.js";
+import {
+  projectData,
+  projectDataUpdte,
+  todoData,
+  userData,
+} from "../constants.js";
 import { userModel } from "../models/user.model.js";
 import Jwt from "jsonwebtoken";
 import { projectModel } from "../models/project.model.js";
+import { todoModel } from "../models/todo.model.js";
 
 dotenv.config();
 //
@@ -16,7 +22,7 @@ beforeEach((done) => {
 });
 let token;
 let projectId;
-
+let todoId;
 describe("POST /api/v1/user/register", () => {
   test("should register a new user successfully", async () => {
     const response = await supertest(app)
@@ -181,11 +187,6 @@ describe("GET /api/v1/project/getUserProject", () => {
 });
 
 describe("GET /api/v1/project/getProject", () => {
-  afterAll(async () => {
-    await userModel.deleteOne({ email: userData["email"] });
-    await projectModel.deleteOne({ _id: projectId });
-  });
-
   test("should return project data successfully", async () => {
     const response = await supertest(app)
       .get("/api/v1/project/getProject")
@@ -214,10 +215,53 @@ describe("GET /api/v1/project/getProject", () => {
       .get("/api/v1/project/getProject")
       .set("Authorization", `Bearer ${token}`);
 
-    console.log(response.body);
-
     expect(response.statusCode).toBe(400);
     expect(response.body.statusCode).toBe(400);
     expect(response.body.message).toBe("Project ID is required");
+  });
+});
+
+describe("POST /api/v1/todo/create", () => {
+  afterAll(async () => {
+    // Clean up
+    await userModel.deleteOne({ email: userData["email"] });
+    await projectModel.deleteOne({ _id: projectId });
+    await todoModel.deleteOne({ _id: todoId });
+  });
+  const todoDataWithProjectId = { ...todoData };
+  test("should create a new todo and return status 201", async () => {
+    todoDataWithProjectId["projectId"] = projectId;
+    const response = await supertest(app)
+      .post("/api/v1/todo/create")
+      .send(todoDataWithProjectId)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(201);
+    expect(response.body.statusCode).toBe(201);
+    todoId = response.body.data["_id"];
+  });
+
+  test("should return error if token is invalid", async () => {
+    const invalidToken = "invalidToken";
+
+    const response = await supertest(app)
+      .post("/api/v1/todo/create")
+      .send(todoDataWithProjectId)
+      .set("Authorization", `Bearer ${invalidToken}`);
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body.statusCode).toBe(401);
+    expect(response.body.message).toBe("Invalid access token");
+  });
+
+  test("should return error if data is missing", async () => {
+    const response = await supertest(app)
+      .post("/api/v1/todo/create")
+      .send({})
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body.statusCode).toBe(400);
+    expect(response.body.message).toBe("Invalid data");
   });
 });

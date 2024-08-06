@@ -6,9 +6,13 @@ export const userData = {
 };
 
 export const projectData = {
-    Title: "New Project"
+  Title: "New Project",
 };
 
-export const projectDataUpdte={
-    Title: "old Project"
-}
+export const projectDataUpdte = {
+  Title: "old Project",
+};
+export const todoData = {
+  Description: "Test Todo",
+  Status: true,
+};
