@@ -6,6 +6,7 @@ import {
   projectData,
   projectDataUpdte,
   todoData,
+  todoUpdateData,
   userData,
 } from "../constants.js";
 import { userModel } from "../models/user.model.js";
@@ -222,12 +223,6 @@ describe("GET /api/v1/project/getProject", () => {
 });
 
 describe("POST /api/v1/todo/create", () => {
-  afterAll(async () => {
-    // Clean up
-    await userModel.deleteOne({ email: userData["email"] });
-    await projectModel.deleteOne({ _id: projectId });
-    await todoModel.deleteOne({ _id: todoId });
-  });
   const todoDataWithProjectId = { ...todoData };
   test("should create a new todo and return status 201", async () => {
     todoDataWithProjectId["projectId"] = projectId;
@@ -263,5 +258,36 @@ describe("POST /api/v1/todo/create", () => {
     expect(response.statusCode).toBe(400);
     expect(response.body.statusCode).toBe(400);
     expect(response.body.message).toBe("Invalid data");
+  });
+});
+describe("patch /api/v1/todo/update", () => {
+  afterAll(async () => {
+    // Clean up
+    await userModel.deleteOne({ email: userData["email"] });
+    await projectModel.deleteOne({ _id: projectId });
+    await todoModel.deleteOne({ _id: todoId });
+  });
+  const updatedTodoDataWithTodoId = { ...todoUpdateData };
+  test("should update a todo and return status 200", async () => {
+    updatedTodoDataWithTodoId["_id"] = todoId;
+    const response = await supertest(app)
+      .patch("/api/v1/todo/update")
+      .send(updatedTodoDataWithTodoId)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.statusCode).toBe(200);
+  });
+
+  test("should return error if token is invalid", async () => {
+    const invalidToken = "invalidToken";
+    const response = await supertest(app)
+      .patch("/api/v1/todo/update")
+      .send(updatedTodoDataWithTodoId)
+      .set("Authorization", `Bearer ${invalidToken}`);
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body.statusCode).toBe(401);
+    expect(response.body.message).toBe("Invalid access token");
   });
 });

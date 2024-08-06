@@ -16,3 +16,8 @@ export const todoData = {
   Description: "Test Todo",
   Status: true,
 };
+
+export const todoUpdateData = {
+  Description: "update Todo",
+  Status: true,
+};
