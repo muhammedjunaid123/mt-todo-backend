@@ -70,7 +70,7 @@ ${pendingList}
 ${CompletedList}
 `;
 
-  fs.appendFile(filePath, text, (err) => {
+  fs.writeFile(filePath, text, (err) => {
     if (err) {
       console.error("Error writing file:", err);
       return;
